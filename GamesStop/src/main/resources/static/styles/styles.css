@@ -1,0 +1,23 @@
+:root{
+    --primary: #1e186b;
+    --secondary: #403cb2;
+    --green: #86ee41;
+    --background: #191a1c;
+    --text-muted: #c51414;
+}
+
+.juegos{
+    padding: 0;
+    overflow: hidden;
+}
+
+.juegos img{
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.game-content{
+    padding: 20px;
+}
