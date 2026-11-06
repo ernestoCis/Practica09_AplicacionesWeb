@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+  =============================================================================
+  TEORÍA DE LAYOUTS (EL PATRÓN DECORADOR EN THYMELEAF)
+  =============================================================================
+  PROFE: Este es el "Cascarón Maestro" de toda nuestra aplicación.
+  En lugar de copiar y pegar el <head> y el Navbar en todas las páginas,
+  convertiremos todo este archivo HTML en un Fragmento Gigante.
+
+  Explicación de 'th:fragment="layout(title, content)"':
+  - Estamos bautizando a TODO este archivo como un fragmento llamado "layout".
+  - (title, content): Son los PARÁMETROS que las otras páginas nos van a enviar.
+    'title' será la etiqueta <title> específica de cada página.
+    'content' será el código <main> de cada página.
+-->
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content)">
+<head>
+    <meta charset="UTF-8">
+
+    <!--
+      AQUÍ INYECTAMOS EL TÍTULO:
+      Cuando la página de Juegos llame a este layout, le pasará su propio <title>.
+      Usamos 'th:replace' para que Thymeleaf literalmente destruya esta etiqueta
+      y ponga la que nos pasaron por parámetro.
+    -->
+    <title th:replace="${title}">GameVault</title>
+
+    <!--
+      RUTAS DINÁMICAS (ESTÁNDAR DE SPRING BOOT)
+      PROFE: Haz énfasis en el símbolo de arroba '@{}'
+      Thymeleaf calcula la URL absoluta hacia la carpeta 'static'. Si el proyecto
+      cambia de dominio o de subcarpeta en producción, el CSS no se va a romper.
+    -->
+    <link rel="stylesheet" th:href="@{/styles/style.css}">
+</head>
+<body>
+
+    <!--
+      ESTRUCTURA REUTILIZABLE:
+      Este Navbar se escribe una sola vez aquí, y aparecerá en todas las páginas
+      porque las demás páginas se van a "meter" dentro de este layout.
+    -->
+    <nav>
+        <a th:href="@{/juegos}" class="nav-brand">🎮 GameVault</a>
+        <div class="nav-links">
+            <a th:href="@{/juegos}">Catálogo</a>
+            <a th:href="@{/juegos/nuevo}">Subir Juego</a>
+            <a th:href="@{/fragments-demo}" style="color: var(--success); margin-left:20px;">[Teoría]</a>
+        </div>
+    </nav>
+
+    <!--
+      AQUÍ INYECTAMOS EL CONTENIDO (EL CORAZÓN DEL LAYOUT):
+      Usamos 'th:replace="${content}"'.
+      Esto significa: "Borra este <main> y pon el <main> que me enviaron como parámetro".
+      Así, el Navbar siempre se queda arriba, y el contenido cambia dinámicamente.
+    -->
+    <main class="container" th:replace="${content}">
+        Contenido por defecto...
+    </main>
+
+</body>
+</html>

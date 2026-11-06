@@ -1,0 +1,26 @@
+<th:block th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+    <title th:text="${juego.titulo}"></title>
+    <main>
+
+        <h2 class="text-gradient" th:text="${juego.titulo}"></h2>
+        <a th:href="@{/juegos/editar/{id}(id=${juego.id})}" class="btn btn-primary">Editar</a>
+
+        <form th:action="@{/juegos/eliminar/{id}(id=${juego.id})}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+
+        <div style="...">
+            <div class="game-detail">
+                <img alt="portada juego"
+                        th:src="${#strings.startsWith(juego.portadaUrl, 'http')} ? ${juego.portadaUrl} : @{/uploads/{img}(img=${juego.portadaUrl})}"/>
+                <div class="game-description">
+                    <span class="pill" th:text="${juego.categoria}"></span>
+                    <span th:text="${juego.precio}"></span>
+                    <p th:text="${juego.descripcion}"></p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</th:block>
