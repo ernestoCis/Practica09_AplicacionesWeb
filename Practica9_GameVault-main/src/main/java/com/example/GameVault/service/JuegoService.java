@@ -2,6 +2,7 @@ package com.example.GameVault.service;
 
 import com.example.GameVault.model.Juego;
 import com.example.GameVault.repository.JuegoRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +35,7 @@ public class JuegoService {
     }
 
     public void guardarJuego(Juego juego, MultipartFile portada){
-        String nombreArchivo = "default.png";
+        String urlImagen = juego.getPortadaUrl() != null ? juego.getPortadaUrl() : "default.png";
 
         // Verificamos si el archivo no está vacío
         if (portada != null && !portada.isEmpty()) {
@@ -45,22 +46,22 @@ public class JuegoService {
                     Files.createDirectories(uploadPath);
                 }
 
-                nombreArchivo = UUID.randomUUID().toString() + "_" + portada.getOriginalFilename();
-                Path filePath = uploadPath.resolve(nombreArchivo);
+                urlImagen = UUID.randomUUID().toString() + "_" + portada.getOriginalFilename();
+                Path filePath = uploadPath.resolve(urlImagen);
 
 
                 Files.copy(portada.getInputStream(), filePath);
 
                 System.out.println("Archivo guardado en: " + filePath.toAbsolutePath());
 
-                juego.setPortadaUrl(nombreArchivo);
+                juego.setPortadaUrl(urlImagen);
 
             } catch (IOException e) {
                 e.printStackTrace();
                 // En un proyecto real, manejaríamos esta excepción apropiadamente (ej. redirigir con error)
             }
         }else if(juego.getId() == null || juego.getPortadaUrl() == null){
-            juego.setPortadaUrl(nombreArchivo);
+            juego.setPortadaUrl(urlImagen);
         }
 
 
@@ -76,6 +77,6 @@ public class JuegoService {
 
 
     public List<Juego> obtenerJuegosPorUsuario(Long usuarioID){
-        return juegoRepository.findByUsuarioID(usuarioID);
+        return juegoRepository.findByUsuarioId(usuarioID);
     }
 }
